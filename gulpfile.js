@@ -1,4 +1,5 @@
 
+
 const gulp 			= require('gulp');		
 const clean 		= require('gulp-clean');
 const less 			= require('gulp-less');
@@ -43,17 +44,17 @@ const paths = {
 
 
 gulp.task('clean', ()=>{
-	 return gulp.src(paths.base.dest, {read: false})
-	 			.pipe(clean());
+	return gulp.src(paths.base.dest, {read: false})
+				.pipe(clean());
 });
 
 gulp.task('html', ()=>{
-	 return gulp.src(paths.html.src)
+	return gulp.src(paths.html.src)
 				.pipe(gulp.dest(paths.html.dest));
 });
 
 gulp.task('less', ()=>{
-	 return gulp.src(paths.less.main)
+	return gulp.src(paths.less.main)
 				.pipe(less())
 				.pipe(autoprefixer({
 					browsers: ['Chrome > 0', 'ff > 0', 'ie > 0', 'Opera > 0', 'iOS > 0', 'Android > 0']
@@ -62,7 +63,7 @@ gulp.task('less', ()=>{
 });
 
 gulp.task('js', ()=>{
-	 return gulp.src(paths.js.src)
+	return gulp.src(paths.js.src)
 				.pipe(gulp.dest(paths.js.dest))
 				.pipe(uglify())
 				.pipe(rename({suffix: '.min'}))
@@ -70,12 +71,12 @@ gulp.task('js', ()=>{
 });
 
 gulp.task('lib', ()=>{
-	 return gulp.src(paths.lib.src)
+	return gulp.src(paths.lib.src)
 				.pipe(gulp.dest(paths.lib.dest));
 });
 
 gulp.task('image', ()=>{
-	 return gulp.src(paths.image.src)
+	return gulp.src(paths.image.src)
 				.pipe(imagemin())
 				.pipe(gulp.dest(paths.image.dest));
 });

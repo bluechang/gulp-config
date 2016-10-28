@@ -1,8 +1,8 @@
 
 const gulp 			= require('gulp');		
-const clean        	= require('gulp-clean');
-const less          = require('gulp-less');
-const autoprefixer	= require('gulp-autoprefixer');
+const clean 		= require('gulp-clean');
+const less 			= require('gulp-less');
+const autoprefixer 	= require('gulp-autoprefixer');
 const uglify        = require('gulp-uglify');
 const imagemin      = require('gulp-imagemin');
 const rename        = require('gulp-rename');

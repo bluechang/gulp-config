@@ -1,6 +1,6 @@
 /**
  *
- * 不使用gulp-sequence插件：
+ * 
  * 参考：https://github.com/lisposter/gulp-docs-zh-cn/blob/master/API.md#gulptaskname--deps--fn
  * 
  * 
@@ -20,8 +20,6 @@
  *
  * 由于gulp是stream(流式)操作，所以，返回一个stream比较常用
  * 
- * 
- * 
  */
 
 const gulp 			= require('gulp');		
@@ -31,6 +29,7 @@ const autoprefixer 	= require('gulp-autoprefixer');
 const minifyCss 	= require('gulp-minify-css');
 const uglify        = require('gulp-uglify');
 const imagemin      = require('gulp-imagemin');
+const cache      	= require('gulp-cache');
 const rename        = require('gulp-rename');
 const browserSync   = require('browser-sync').create();
 
@@ -71,13 +70,13 @@ gulp.task('clean', ()=>{
 	return del([paths.base.dest]);
 });
 
-gulp.task('html', ['clean'], ()=>{
+gulp.task('html', ()=>{
 	return gulp.src(paths.html.src)
 				.pipe(gulp.dest(paths.html.dest))
 				.pipe(browserSync.stream({once: true}));
 });
 
-gulp.task('less', ['clean'], ()=>{
+gulp.task('less', ()=>{
 	return gulp.src(paths.less.main)
 				.pipe(less())
 				.pipe(autoprefixer({
@@ -90,7 +89,7 @@ gulp.task('less', ['clean'], ()=>{
 				.pipe(browserSync.stream({once: true}));
 });
 
-gulp.task('js', ['clean'], ()=>{
+gulp.task('js', ()=>{
 	return gulp.src(paths.js.src)
 				.pipe(gulp.dest(paths.js.dest))
 				.pipe(uglify())
@@ -99,13 +98,13 @@ gulp.task('js', ['clean'], ()=>{
 				.pipe(browserSync.stream({once: true}));
 });
 
-gulp.task('lib', ['clean'], ()=>{
+gulp.task('lib', ()=>{
 	return gulp.src(paths.lib.src)
 				.pipe(gulp.dest(paths.lib.dest))
 				.pipe(browserSync.stream({once: true}));
 });
 
-gulp.task('image', ['clean'], ()=>{
+gulp.task('image', ()=>{
 	return gulp.src(paths.image.src)
 				.pipe(imagemin())
 				.pipe(gulp.dest(paths.image.dest))
@@ -121,7 +120,7 @@ gulp.task('watch', ['html', 'less', 'js', 'lib', 'image'], (cb)=>{
 	cb && cb();
 });
 
-gulp.task('server', ['watch'], (cb)=>{
+gulp.task('server', ['clean', 'watch'], (cb)=>{
 	browserSync.init({
 		notify: false,
 		port: 3000,

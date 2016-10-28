@@ -1,5 +1,4 @@
 
-
 const gulp 			= require('gulp');		
 const del 	 		= require('del');
 const less 			= require('gulp-less');
@@ -94,6 +93,7 @@ gulp.task('watch', (cb)=>{
 	gulp.watch(paths.html.src, ['html']);
 	gulp.watch(paths.less.src, ['less']);
 	gulp.watch(paths.js.src, ['js']);
+	gulp.watch(paths.lib.src, ['lib']);
 	gulp.watch(paths.image.src, ['image']);
 
 	cb && cb();
@@ -117,5 +117,3 @@ gulp.task('build', (cb)=>{
 });
 
 gulp.task('default', ['build']);
-
-

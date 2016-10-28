@@ -91,7 +91,7 @@ gulp.task('watch', (cb)=>{
 	cb && cb();
 });
 
-gulp.task('server', ()=>{
+gulp.task('server', (cb)=>{
 	browserSync.init({
 		notify: false,
 		port: 3000,
@@ -99,6 +99,8 @@ gulp.task('server', ()=>{
 			baseDir: './dist'
 		}
 	});
+
+	cb && cb();
 });
 
 gulp.task('build', (cb)=>{

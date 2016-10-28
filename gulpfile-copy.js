@@ -67,12 +67,13 @@ const paths = {
 
 
 gulp.task('clean', ()=>{
+	//read: false, 不读取文件,直接执行clean(),加快速度
 	return gulp.src(paths.base.dest, {read: false})
 				.pipe(clean());
 });
 
 gulp.task('html', ['clean'], ()=>{
-	return gulp.src(paths.html.src)
+	return gulp.src(paths.html.src, {read: false})
 				.pipe(gulp.dest(paths.html.dest));
 });
 
@@ -94,7 +95,7 @@ gulp.task('js', ['clean'], ()=>{
 });
 
 gulp.task('lib', ['clean'], ()=>{
-	return gulp.src(paths.lib.src)
+	return gulp.src(paths.lib.src, {read: false})
 				.pipe(gulp.dest(paths.lib.dest));
 });
 
@@ -122,7 +123,7 @@ gulp.task('server', ['watch'], (cb)=>{
 			baseDir: './dist'
 		}
 	});
-	
+
 	cb && cb();
 });
 

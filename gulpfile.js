@@ -11,7 +11,7 @@ const gulpSequence  = require('gulp-sequence');
 const browserSync   = require('browser-sync').create();
 
 
-const files = {
+const paths = {
 	base: {
 		src: 'src',
 		srcAll: 'src/**',
@@ -43,48 +43,48 @@ const files = {
 
 
 gulp.task('html', ()=>{
-	return gulp.src(files.html.src)
-				.pipe(gulp.dest(files.html.dest));
+	return gulp.src(paths.html.src)
+				.pipe(gulp.dest(paths.html.dest));
 });
 
 gulp.task('less', ()=>{
-	return gulp.src(files.less.main)
+	return gulp.src(paths.less.main)
 				.pipe(less())
 				.pipe(autoprefixer({
 					browsers: ['Chrome > 0', 'ff > 0', 'ie > 0', 'Opera > 0', 'iOS > 0', 'Android > 0']
 				}))
-				.pipe(gulp.dest(files.less.dest));
+				.pipe(gulp.dest(paths.less.dest));
 });
 
 gulp.task('js', ()=>{
-	return gulp.src(files.js.src)
-				.pipe(gulp.dest(files.js.dest))
+	return gulp.src(paths.js.src)
+				.pipe(gulp.dest(paths.js.dest))
 				.pipe(uglify())
 				.pipe(rename({suffix: '.min'}))
-				.pipe(gulp.dest(files.js.dest));
+				.pipe(gulp.dest(paths.js.dest));
 });
 
 gulp.task('lib', ()=>{
-	return gulp.src(files.lib.src)
-				.pipe(gulp.dest(files.lib.dest));
+	return gulp.src(paths.lib.src)
+				.pipe(gulp.dest(paths.lib.dest));
 });
 
 gulp.task('image', ()=>{
-	return gulp.src(files.image.src)
+	return gulp.src(paths.image.src)
 				.pipe(imagemin())
-				.pipe(gulp.dest(files.image.dest));
+				.pipe(gulp.dest(paths.image.dest));
 });
 
 gulp.task('clean', ()=>{
-	return del([files.base.dest]);
+	return del([paths.base.dest]);
 });
 
 gulp.task('watch', ()=>{
-	gulp.watch(files.html.src, ['html']);
-	gulp.watch(files.less.src, ['less']);
-	gulp.watch(files.js.src, ['js']);
-	gulp.watch(files.image.src, ['image']);
-	gulp.watch(files.base.destAll, browserSync.reload);
+	gulp.watch(paths.html.src, ['html']);
+	gulp.watch(paths.less.src, ['less']);
+	gulp.watch(paths.js.src, ['js']);
+	gulp.watch(paths.image.src, ['image']);
+	gulp.watch(paths.base.destAll, browserSync.reload);
 });
 
 gulp.task('server', ()=>{

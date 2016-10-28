@@ -1,4 +1,28 @@
-
+/**
+ *
+ * 不使用gulp-sequence插件：
+ * 参考：https://github.com/lisposter/gulp-docs-zh-cn/blob/master/API.md#gulptaskname--deps--fn
+ * 
+ * 
+ * 由于task都是异步执行的，
+ * 要实现顺序的执行，需要做两件事：
+ * 1、给出一个提示，来告知 task 什么时候执行完毕
+ * 2、并且再给出一个提示，来告知一个 task 依赖另一个 task 的完成
+ *
+ * 所以，需要层层依赖，gulp.task('default', ['lastTask']), 只需执行顺序中的最后一个task。
+ *
+ *
+ * 注：
+ * 要使task正确异步执行，需满足以下其中一点：
+ * 1、接受一个 callback
+ * 2、返回一个 stream
+ * 3、返回一个 promise
+ *
+ * 由于gulp是stream(流式)操作，所以，返回一个stream比较常用
+ * 
+ * 
+ * 
+ */
 
 const gulp 			= require('gulp');		
 const clean 		= require('gulp-clean');
@@ -7,7 +31,6 @@ const autoprefixer 	= require('gulp-autoprefixer');
 const uglify        = require('gulp-uglify');
 const imagemin      = require('gulp-imagemin');
 const rename        = require('gulp-rename');
-const gulpSequence  = require('gulp-sequence');
 const browserSync   = require('browser-sync').create();
 
 
@@ -48,12 +71,12 @@ gulp.task('clean', ()=>{
 				.pipe(clean());
 });
 
-gulp.task('html', ()=>{
+gulp.task('html', ['clean'], ()=>{
 	return gulp.src(paths.html.src)
 				.pipe(gulp.dest(paths.html.dest));
 });
 
-gulp.task('less', ()=>{
+gulp.task('less', ['clean'], ()=>{
 	return gulp.src(paths.less.main)
 				.pipe(less())
 				.pipe(autoprefixer({
@@ -62,7 +85,7 @@ gulp.task('less', ()=>{
 				.pipe(gulp.dest(paths.less.dest));
 });
 
-gulp.task('js', ()=>{
+gulp.task('js', ['clean'], ()=>{
 	return gulp.src(paths.js.src)
 				.pipe(gulp.dest(paths.js.dest))
 				.pipe(uglify())
@@ -70,18 +93,18 @@ gulp.task('js', ()=>{
 				.pipe(gulp.dest(paths.js.dest));
 });
 
-gulp.task('lib', ()=>{
+gulp.task('lib', ['clean'], ()=>{
 	return gulp.src(paths.lib.src)
 				.pipe(gulp.dest(paths.lib.dest));
 });
 
-gulp.task('image', ()=>{
+gulp.task('image', ['clean'], ()=>{
 	return gulp.src(paths.image.src)
 				.pipe(imagemin())
 				.pipe(gulp.dest(paths.image.dest));
 });
 
-gulp.task('watch', (cb)=>{
+gulp.task('watch', ['html', 'less', 'js', 'lib', 'image'], (cb)=>{
 	gulp.watch(paths.html.src, ['html']);
 	gulp.watch(paths.less.src, ['less']);
 	gulp.watch(paths.js.src, ['js']);
@@ -91,7 +114,7 @@ gulp.task('watch', (cb)=>{
 	cb && cb();
 });
 
-gulp.task('server', ()=>{
+gulp.task('server', ['watch'], ()=>{
 	browserSync.init({
 		notify: false,
 		port: 3000,
@@ -101,11 +124,6 @@ gulp.task('server', ()=>{
 	});
 });
 
-gulp.task('build', (cb)=>{
-	// 数组里的是可以异步执行的
-	gulpSequence('clean', ['html', 'less', 'js', 'lib', 'image'], ['watch', 'server'])(cb);
-});
-
-gulp.task('default', ['build']);
+gulp.task('default', ['server']);
 
 

@@ -74,7 +74,7 @@ gulp.task('js', ()=>{
 				.pipe(uglify())
 				.pipe(rename({suffix: '.min'}))
 				.pipe(gulp.dest(paths.js.dest))
-				.pipe(browserSync.stream({once: true})); 
+				.pipe(browserSync.stream({once: true}));
 });
 
 gulp.task('lib', ()=>{

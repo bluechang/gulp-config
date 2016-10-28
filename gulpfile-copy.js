@@ -9,7 +9,7 @@
  * 1、给出一个提示，来告知 task 什么时候执行完毕
  * 2、并且再给出一个提示，来告知一个 task 依赖另一个 task 的完成
  *
- * 所以，需要层层依赖，gulp.task('default', ['lastTask']), 只需执行顺序中的最后一个task。
+ * 所以，需要层层依赖，gulp.task('default', ['lastTask']), 只需执行顺序中的最后一个task即可。
  *
  *
  * 注：
@@ -114,7 +114,7 @@ gulp.task('watch', ['html', 'less', 'js', 'lib', 'image'], (cb)=>{
 	cb && cb();
 });
 
-gulp.task('server', ['watch'], ()=>{
+gulp.task('server', ['watch'], (cb)=>{
 	browserSync.init({
 		notify: false,
 		port: 3000,
@@ -122,6 +122,8 @@ gulp.task('server', ['watch'], ()=>{
 			baseDir: './dist'
 		}
 	});
+	
+	cb && cb();
 });
 
 gulp.task('default', ['server']);

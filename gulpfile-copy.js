@@ -25,9 +25,10 @@
  */
 
 const gulp 			= require('gulp');		
-const clean 		= require('gulp-clean');
+const del 	 		= require('del');
 const less 			= require('gulp-less');
 const autoprefixer 	= require('gulp-autoprefixer');
+const minifyCss 	= require('gulp-minify-css');
 const uglify        = require('gulp-uglify');
 const imagemin      = require('gulp-imagemin');
 const rename        = require('gulp-rename');
@@ -67,14 +68,13 @@ const paths = {
 
 
 gulp.task('clean', ()=>{
-	//read: false, 不读取文件,直接执行clean(),加快速度
-	return gulp.src(paths.base.dest, {read: false})
-				.pipe(clean());
+	return del([paths.base.dest]);
 });
 
 gulp.task('html', ['clean'], ()=>{
-	return gulp.src(paths.html.src, {read: false})
-				.pipe(gulp.dest(paths.html.dest));
+	return gulp.src(paths.html.src)
+				.pipe(gulp.dest(paths.html.dest))
+				.pipe(browserSync.stream({once: true}));
 });
 
 gulp.task('less', ['clean'], ()=>{
@@ -83,7 +83,11 @@ gulp.task('less', ['clean'], ()=>{
 				.pipe(autoprefixer({
 					browsers: ['Chrome > 0', 'ff > 0', 'ie > 0', 'Opera > 0', 'iOS > 0', 'Android > 0']
 				}))
-				.pipe(gulp.dest(paths.less.dest));
+				.pipe(gulp.dest(paths.less.dest))
+				.pipe(rename({suffix: '.min'}))
+				.pipe(minifyCss())
+				.pipe(gulp.dest(paths.less.dest))
+				.pipe(browserSync.stream({once: true}));
 });
 
 gulp.task('js', ['clean'], ()=>{
@@ -91,18 +95,21 @@ gulp.task('js', ['clean'], ()=>{
 				.pipe(gulp.dest(paths.js.dest))
 				.pipe(uglify())
 				.pipe(rename({suffix: '.min'}))
-				.pipe(gulp.dest(paths.js.dest));
+				.pipe(gulp.dest(paths.js.dest))
+				.pipe(browserSync.stream({once: true}));
 });
 
 gulp.task('lib', ['clean'], ()=>{
-	return gulp.src(paths.lib.src, {read: false})
-				.pipe(gulp.dest(paths.lib.dest));
+	return gulp.src(paths.lib.src)
+				.pipe(gulp.dest(paths.lib.dest))
+				.pipe(browserSync.stream({once: true}));
 });
 
 gulp.task('image', ['clean'], ()=>{
 	return gulp.src(paths.image.src)
 				.pipe(imagemin())
-				.pipe(gulp.dest(paths.image.dest));
+				.pipe(gulp.dest(paths.image.dest))
+				.pipe(browserSync.stream({once: true}));
 });
 
 gulp.task('watch', ['html', 'less', 'js', 'lib', 'image'], (cb)=>{
@@ -110,7 +117,6 @@ gulp.task('watch', ['html', 'less', 'js', 'lib', 'image'], (cb)=>{
 	gulp.watch(paths.less.src, ['less']);
 	gulp.watch(paths.js.src, ['js']);
 	gulp.watch(paths.image.src, ['image']);
-	gulp.watch(paths.base.srcAll, browserSync.reload);
 
 	cb && cb();
 });

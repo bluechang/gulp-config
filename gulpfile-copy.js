@@ -1,24 +1,7 @@
 /**
  *
  * 
- * 参考：https://github.com/lisposter/gulp-docs-zh-cn/blob/master/API.md#gulptaskname--deps--fn
- * 
- * 
- * 由于task都是异步执行的，
- * 要实现顺序的执行，需要做两件事：
- * 1、给出一个提示，来告知 task 什么时候执行完毕
- * 2、并且再给出一个提示，来告知一个 task 依赖另一个 task 的完成
  *
- * 所以，需要层层依赖，gulp.task('default', ['lastTask']), 只需执行顺序中的最后一个task即可。
- *
- *
- * 注：
- * 要使task正确异步执行，需满足以下其中一点：
- * 1、接受一个 callback
- * 2、返回一个 stream
- * 3、返回一个 promise
- *
- * 由于gulp是stream(流式)操作，所以，返回一个stream比较常用
  * 
  */
 

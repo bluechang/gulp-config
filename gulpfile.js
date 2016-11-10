@@ -2,9 +2,11 @@
 const gulp 			= require('gulp');		
 const del 	 		= require('del');
 const less 			= require('gulp-less');
+const sass 			= require('gulp-sass');
 const autoprefixer 	= require('gulp-autoprefixer');
 const minifyCss 	= require('gulp-minify-css');
 const uglify        = require('gulp-uglify');
+const concat		= require('gulp-concat');
 const imagemin      = require('gulp-imagemin');
 const cache      	= require('gulp-cache');
 const rename        = require('gulp-rename');
@@ -24,12 +26,18 @@ const paths = {
 		dest: 'dist'
 	},
 	less: {
-		src: ['src/static/less/**'],
+		src: ['src/static/less/*.less'],
 		main: 'src/static/less/style.less',
+		dest: 'dist/static/css'
+	},
+	sass: {
+		src: ['src/static/sass/*.scss'],
+		main: 'src/static/sass/style.scss',
 		dest: 'dist/static/css'
 	},
 	js: {
 		src: ['src/static/js/*.js'],
+		all: 'sky.all.js',
 		dest: 'dist/static/js'
 	},
 	lib: {
@@ -67,10 +75,26 @@ gulp.task('less', ()=>{
 				.pipe(browserSync.stream({once: true}));
 });
 
-gulp.task('js', ()=>{
+gulp.task('sass', ()=>{
+	return gulp.src(paths.sass.main)
+				.pipe(sass()) 
+				.pipe(autoprefixer({
+					browsers: ['Chrome > 0', 'ff > 0', 'ie > 0', 'Opera > 0', 'iOS > 0', 'Android > 0']
+				}))
+				.pipe(gulp.dest(paths.sass.dest))
+				.pipe(rename({suffix: '.min'}))
+				.pipe(minifyCss())
+				.pipe(gulp.dest(paths.sass.dest))
+				.pipe(browserSync.stream({once: true}));
+});
+
+gulp.task('js', ()=>{  
 	return gulp.src(paths.js.src)
 				.pipe(gulp.dest(paths.js.dest))
 				.pipe(uglify())
+				.pipe(rename({suffix: '.min'}))
+				.pipe(gulp.dest(paths.js.dest))
+				.pipe(concat(paths.js.all))
 				.pipe(rename({suffix: '.min'}))
 				.pipe(gulp.dest(paths.js.dest))
 				.pipe(browserSync.stream({once: true}));
@@ -90,8 +114,9 @@ gulp.task('image', ()=>{
 });
 
 gulp.task('watch', (cb)=>{
-	gulp.watch(paths.html.src, ['html']);
+	gulp.watch(paths.html.src, ['html']);  
 	gulp.watch(paths.less.src, ['less']);
+	// gulp.watch(paths.sass.src, ['sass']);
 	gulp.watch(paths.js.src, ['js']);
 	gulp.watch(paths.lib.src, ['lib']);
 	gulp.watch(paths.image.src, ['image']);

@@ -1,17 +1,38 @@
 
-const gulp 			= require('gulp');		
-const del 	 		= require('del');
-const less 			= require('gulp-less');
-const sass 			= require('gulp-sass');
-const autoprefixer 	= require('gulp-autoprefixer');
-const cleanCss 		= require('gulp-clean-css');
-const uglify        = require('gulp-uglify');
-const concat		= require('gulp-concat');
-const imagemin      = require('gulp-imagemin');
-const cache      	= require('gulp-cache');
-const rename        = require('gulp-rename');
-const gulpSequence  = require('gulp-sequence');
-const browserSync   = require('browser-sync').create();
+/**
+ *
+ * gulp.src().pipe()的形式  或 能返回这样形式的  是流。
+ * 
+ * 除此外的都不是流，如：
+ * gulp.task('server') 和 gulp.task('watch')
+ *
+ * gulp.task(name [,deps] [,fn])
+ * fn能做到以下其中一点的，就支持异步任务：
+ * 1、接受一个callback
+ * 2、返回一个stream
+ * 3、返回一个promise
+ * 下面的，clean, html, less, sass, js, lib, image 
+ * 因为返回一个stream，将会异步执行。
+ * 除此以外，将会同步执行
+ *
+ * 如需保证任务的顺序执行，可用插件gulp-sequence
+ * 
+ * 
+ */
+
+const gulp 				= 	require('gulp');		
+const del 	 			= 	require('del');
+const less 				= 	require('gulp-less');
+const sass 				= 	require('gulp-sass');
+const autoprefixer 		= 	require('gulp-autoprefixer');
+const cleanCss 			= 	require('gulp-clean-css');
+const uglify        	= 	require('gulp-uglify');
+const imagemin      	= 	require('gulp-imagemin');
+const concat			= 	require('gulp-concat');
+const rename        	= 	require('gulp-rename');
+const cache      		= 	require('gulp-cache');
+const gulpSequence  	= 	require('gulp-sequence');
+const browserSync   	= 	require('browser-sync').create();
 
 
 const paths = {
@@ -116,7 +137,7 @@ gulp.task('image', ()=>{
 gulp.task('watch', ()=>{
 	gulp.watch(paths.html.src, ['html']);  
 	gulp.watch(paths.less.src, ['less']);
-	// gulp.watch(paths.sass.src, ['sass']);
+	gulp.watch(paths.sass.src, ['sass']);
 	gulp.watch(paths.js.src, ['js']);
 	gulp.watch(paths.lib.src, ['lib']);
 	gulp.watch(paths.image.src, ['image']);

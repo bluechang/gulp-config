@@ -4,7 +4,7 @@ const del 	 		= require('del');
 const less 			= require('gulp-less');
 const sass 			= require('gulp-sass');
 const autoprefixer 	= require('gulp-autoprefixer');
-const minifyCss 	= require('gulp-minify-css');
+const cleanCss 		= require('gulp-clean-css');
 const uglify        = require('gulp-uglify');
 const concat		= require('gulp-concat');
 const imagemin      = require('gulp-imagemin');
@@ -37,7 +37,7 @@ const paths = {
 	},
 	js: {
 		src: ['src/static/js/*.js'],
-		all: 'sky.all.js',
+		all: 'sky.js',
 		dest: 'dist/static/js'
 	},
 	lib: {
@@ -69,21 +69,21 @@ gulp.task('less', ()=>{
 					browsers: ['Chrome > 0', 'ff > 0', 'ie > 0', 'Opera > 0', 'iOS > 0', 'Android > 0']
 				}))
 				.pipe(gulp.dest(paths.less.dest))
+				.pipe(cleanCss())
 				.pipe(rename({suffix: '.min'}))
-				.pipe(minifyCss())
 				.pipe(gulp.dest(paths.less.dest))
 				.pipe(browserSync.stream({once: true}));
 });
 
 gulp.task('sass', ()=>{
 	return gulp.src(paths.sass.main)
-				.pipe(sass()) 
+				.pipe(sass().on('error', sass.logError)) 
 				.pipe(autoprefixer({
 					browsers: ['Chrome > 0', 'ff > 0', 'ie > 0', 'Opera > 0', 'iOS > 0', 'Android > 0']
 				}))
 				.pipe(gulp.dest(paths.sass.dest))
+				.pipe(cleanCss())
 				.pipe(rename({suffix: '.min'}))
-				.pipe(minifyCss())
 				.pipe(gulp.dest(paths.sass.dest))
 				.pipe(browserSync.stream({once: true}));
 });
@@ -113,18 +113,16 @@ gulp.task('image', ()=>{
 				.pipe(browserSync.stream({once: true}));
 });
 
-gulp.task('watch', (cb)=>{
+gulp.task('watch', ()=>{
 	gulp.watch(paths.html.src, ['html']);  
 	gulp.watch(paths.less.src, ['less']);
 	// gulp.watch(paths.sass.src, ['sass']);
 	gulp.watch(paths.js.src, ['js']);
 	gulp.watch(paths.lib.src, ['lib']);
 	gulp.watch(paths.image.src, ['image']);
-
-	cb && cb();
 });
 
-gulp.task('server', (cb)=>{
+gulp.task('server', ()=>{
 	browserSync.init({
 		notify: false,
 		port: 3000,
@@ -132,8 +130,6 @@ gulp.task('server', (cb)=>{
 			baseDir: './dist'
 		}
 	});
-
-	cb && cb();
 });
 
 gulp.task('build', (cb)=>{

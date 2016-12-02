@@ -60,7 +60,7 @@ gulp.task('less', ()=>{
 	return gulp.src(paths.less.main)
 				.pipe(less())
 				.pipe(autoprefixer({
-					browsers: ['Chrome > 0', 'ff > 0', 'ie > 0', 'Opera > 0', 'iOS > 0', 'Android > 0']
+					browsers: ['Chrome >= 4', 'ff >= 2', 'Safari >= 3.1', 'ie >= 8', 'Edge >=12 ', 'Opera >= 10.1', 'iOS >= 3.2', 'Android >= 2.1']
 				}))
 				.pipe(cleanCss())
 				.pipe(rename({suffix: '.min'}))

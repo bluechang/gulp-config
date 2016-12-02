@@ -60,8 +60,8 @@ gulp.task('less', ()=>{
 	return gulp.src(paths.less.main)
 				.pipe(less())
 				.pipe(autoprefixer({
-					// 依据http://www.caniuse.com中的版本
-					browsers: ['Chrome >= 4', 'ff >= 2', 'Safari >= 3.1', 'ie >= 8', 'Edge >=12 ', 'Opera >= 10.1', 'iOS >= 3.2', 'Android >= 2.1']
+					// 依据http://www.caniuse.com中的版本，注意格式
+					browsers: ['Chrome >= 4', 'ff >= 2', 'Safari >= 3.1', 'ie >= 8', 'Edge >= 12', 'Opera >= 10.1', 'iOS >= 3.2', 'Android >= 2.1']
 				}))
 				.pipe(cleanCss())
 				.pipe(rename({suffix: '.min'}))

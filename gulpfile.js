@@ -68,6 +68,10 @@ const paths = {
 	image: {
 		src: ['src/static/images/**'],
 		dest: 'dist/static/images'
+	},
+	media: {
+		src: ['src/static/images/**'],
+		dest: 'dist/static/images'
 	}
 };
 
@@ -121,12 +125,6 @@ gulp.task('js', ()=>{
 				.pipe(browserSync.stream({once: true}));
 });
 
-gulp.task('lib', ()=>{
-	return gulp.src(paths.lib.src)
-				.pipe(gulp.dest(paths.lib.dest))
-				.pipe(browserSync.stream({once: true}));
-});
-
 gulp.task('image', ()=>{
 	return gulp.src(paths.image.src)
 				.pipe(cache(imagemin()))
@@ -134,13 +132,10 @@ gulp.task('image', ()=>{
 				.pipe(browserSync.stream({once: true}));
 });
 
-gulp.task('watch', ()=>{
-	gulp.watch(paths.html.src, ['html']);  
-	gulp.watch(paths.less.src, ['less']);
-	gulp.watch(paths.sass.src, ['sass']);
-	gulp.watch(paths.js.src, ['js']);
-	gulp.watch(paths.lib.src, ['lib']);
-	gulp.watch(paths.image.src, ['image']);
+gulp.task('lib', ()=>{
+	return gulp.src(paths.lib.src)
+				.pipe(gulp.dest(paths.lib.dest))
+				.pipe(browserSync.stream({once: true}));
 });
 
 gulp.task('server', ()=>{
@@ -153,9 +148,19 @@ gulp.task('server', ()=>{
 	});
 });
 
+gulp.task('watch', ()=>{
+	gulp.watch(paths.html.src, ['html']);  
+	gulp.watch(paths.less.src, ['less']);
+	gulp.watch(paths.sass.src, ['sass']);
+	gulp.watch(paths.image.src, ['image']);
+	gulp.watch(paths.media.src, ['media']);
+	gulp.watch(paths.lib.src, ['lib']);
+	gulp.watch(paths.js.src, ['js']);
+});
+
 gulp.task('build', (cb)=>{
 	// 数组里的是可以异步执行的
-	gulpSequence('clean', ['html', 'less', 'js', 'lib', 'image'], ['watch', 'server'])(cb);
+	gulpSequence('clean', ['html', 'less', 'js', 'lib', 'image', 'media'], ['watch', 'server'])(cb);
 });
 
 gulp.task('default', ['build']);

@@ -4,6 +4,7 @@
   "description": "configuration for npm package",
   "main": "gulpfile.js",
   "scripts": {
+    "start": "npm i && gulp",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "bluechang",

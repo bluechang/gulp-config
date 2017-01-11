@@ -27,6 +27,7 @@ const autoprefixer 		= 	require('gulp-autoprefixer');
 const cleanCss 			= 	require('gulp-clean-css');
 const uglify        	= 	require('gulp-uglify');
 const imagemin      	= 	require('gulp-imagemin');
+const watch 	      	= 	require('gulp-watch');
 const concat			= 	require('gulp-concat');
 const rename        	= 	require('gulp-rename');
 const cache      		= 	require('gulp-cache');
@@ -66,7 +67,7 @@ const paths = {
 		dest: 'dist/static/lib'
 	},
 	image: {
-		src: ['src/static/images/**'],
+		src: ['src/static/images/**/*.*'],
 		dest: 'dist/static/images'
 	},
 	media: {
@@ -82,7 +83,7 @@ gulp.task('clean', ()=>{
 	return del([paths.base.destAll]);
 });
 
-gulp.task('html', ()=>{
+gulp.task('html', ()=>{					
 	return gulp.src(paths.html.src)
 				.pipe(gulp.dest(paths.html.dest))
 				.pipe(reload({ stream:true }));
@@ -109,7 +110,7 @@ gulp.task('js', ()=>{
 				.pipe(reload({ stream:true }));
 });
 
-gulp.task('image', ()=>{
+gulp.task('image', ()=>{		
 	return gulp.src(paths.image.src)
 				.pipe(cache(imagemin()))
 				.pipe(gulp.dest(paths.image.dest))
@@ -137,8 +138,7 @@ gulp.task('server:init', ()=>{
 gulp.task('watch', ()=>{
 	gulp.watch(paths.html.src, ['html']);  
 	gulp.watch(paths.less.src, ['less']);
-	gulp.watch(paths.image.src, ['image']);
-	gulp.watch(paths.media.src, ['media']);
+	gulp.watch(paths.image.src, ['image']); 
 	gulp.watch(paths.lib.src, ['lib']);
 	gulp.watch(paths.js.src, ['js']); 
 });

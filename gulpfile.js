@@ -140,7 +140,7 @@ gulp.task('watch', ()=>{
 	gulp.watch(paths.image.src, ['image']);
 	gulp.watch(paths.media.src, ['media']);
 	gulp.watch(paths.lib.src, ['lib']);
-	gulp.watch(paths.js.src, ['js']);
+	gulp.watch(paths.js.src, ['js']); 
 });
 
 

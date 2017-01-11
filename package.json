@@ -1,11 +1,13 @@
 {
-  "name": "nodejs",
+  "name": "gulp",
   "version": "1.0.0",
-  "description": "configuration for npm package",
-  "main": "gulpfile.js",
+  "description": "app",
+  "main": "app.js",
   "scripts": {
-    "start": "npm i && gulp",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "npm i && gulp build",
+    "server": "gulp server",
+    "dist": "gulp dist",
+    "clean": "gulp clean"
   },
   "author": "bluechang",
   "license": "ISC",
@@ -21,7 +23,7 @@
     "gulp-less": "^3.1.0",
     "gulp-rename": "^1.2.2",
     "gulp-sass": "^2.3.2",
-    "gulp-sequence": "^0.4.6",
-    "gulp-uglify": "^2.0.0"
+    "gulp-uglify": "^2.0.0",
+    "run-sequence": "^1.2.2"
   }
 }

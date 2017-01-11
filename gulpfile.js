@@ -23,7 +23,6 @@
 const gulp 				= 	require('gulp');		
 const del 	 			= 	require('del');
 const less 				= 	require('gulp-less');
-const sass 				= 	require('gulp-sass');
 const autoprefixer 		= 	require('gulp-autoprefixer');
 const cleanCss 			= 	require('gulp-clean-css');
 const uglify        	= 	require('gulp-uglify');
@@ -31,8 +30,9 @@ const imagemin      	= 	require('gulp-imagemin');
 const concat			= 	require('gulp-concat');
 const rename        	= 	require('gulp-rename');
 const cache      		= 	require('gulp-cache');
-const gulpSequence  	= 	require('gulp-sequence');
-const browserSync   	= 	require('browser-sync').create();
+const runSequence  		= 	require('run-sequence');
+const browserSync   	= 	require('browser-sync');
+const reload			=	browserSync.reload;
 
 
 const paths = {
@@ -78,13 +78,14 @@ const paths = {
 
 
 gulp.task('clean', ()=>{
-	return del([paths.base.dest]);
+	//del中的 '**', 会删除所有的 children 和 parent
+	return del([paths.base.destAll]);
 });
 
 gulp.task('html', ()=>{
 	return gulp.src(paths.html.src)
 				.pipe(gulp.dest(paths.html.dest))
-				.pipe(browserSync.stream({once: true}));
+				.pipe(reload({ stream:true }));
 });
 
 gulp.task('less', ()=>{
@@ -93,56 +94,41 @@ gulp.task('less', ()=>{
 				.pipe(autoprefixer({
 					browsers: ['Chrome > 0', 'ff > 0', 'ie > 0', 'Opera > 0', 'iOS > 0', 'Android > 0']
 				}))
-				.pipe(gulp.dest(paths.less.dest))
 				.pipe(cleanCss())
-				.pipe(rename({suffix: '.min'}))
+				.pipe(rename({extname: '.min.css'}))
 				.pipe(gulp.dest(paths.less.dest))
-				.pipe(browserSync.stream({once: true}));
-});
-
-gulp.task('sass', ()=>{
-	return gulp.src(paths.sass.main)
-				.pipe(sass().on('error', sass.logError)) 
-				.pipe(autoprefixer({
-					browsers: ['Chrome > 0', 'ff > 0', 'ie > 0', 'Opera > 0', 'iOS > 0', 'Android > 0']
-				}))
-				.pipe(gulp.dest(paths.sass.dest))
-				.pipe(cleanCss())
-				.pipe(rename({suffix: '.min'}))
-				.pipe(gulp.dest(paths.sass.dest))
-				.pipe(browserSync.stream({once: true}));
+				.pipe(reload({ stream:true }));
 });
 
 gulp.task('js', ()=>{  
 	return gulp.src(paths.js.src)
-				.pipe(gulp.dest(paths.js.dest))
 				.pipe(uglify())
-				.pipe(rename({suffix: '.min'}))
-				.pipe(gulp.dest(paths.js.dest))
 				.pipe(concat(paths.js.all))
 				.pipe(rename({suffix: '.min'}))
 				.pipe(gulp.dest(paths.js.dest))
-				.pipe(browserSync.stream({once: true}));
+				.pipe(reload({ stream:true }));
 });
 
 gulp.task('image', ()=>{
 	return gulp.src(paths.image.src)
 				.pipe(cache(imagemin()))
 				.pipe(gulp.dest(paths.image.dest))
-				.pipe(browserSync.stream({once: true}));
+				.pipe(reload({ stream:true }));
 });
 
 gulp.task('lib', ()=>{
 	return gulp.src(paths.lib.src)
+				.pipe(uglify())
+				.pipe(rename({suffix: '.min'}))
 				.pipe(gulp.dest(paths.lib.dest))
-				.pipe(browserSync.stream({once: true}));
+				.pipe(reload({ stream:true }));
 });
 
-gulp.task('server', ()=>{
+gulp.task('server:init', ()=>{
 	browserSync.init({
 		notify: false,
 		port: 3000,
-		server: {
+		server: { 
 			baseDir: './dist'
 		}
 	});
@@ -151,16 +137,27 @@ gulp.task('server', ()=>{
 gulp.task('watch', ()=>{
 	gulp.watch(paths.html.src, ['html']);  
 	gulp.watch(paths.less.src, ['less']);
-	gulp.watch(paths.sass.src, ['sass']);
 	gulp.watch(paths.image.src, ['image']);
 	gulp.watch(paths.media.src, ['media']);
 	gulp.watch(paths.lib.src, ['lib']);
 	gulp.watch(paths.js.src, ['js']);
 });
 
-gulp.task('build', (cb)=>{
+
+
+/*build*/
+gulp.task('build', (callback)=>{
 	// 数组里的是可以异步执行的
-	gulpSequence('clean', ['html', 'less', 'js', 'lib', 'image', 'media'], ['watch', 'server'])(cb);
+	runSequence('clean', ['html', 'less', 'js', 'lib', 'image'], ['watch', 'server:init'], callback);
 });
 
-gulp.task('default', ['build']);
+/*dist*/
+gulp.task('dist', (callback)=>{
+	runSequence('clean', ['html', 'less', 'js', 'lib', 'image'], callback);
+});
+
+/*serve*/
+gulp.task('server', (callback)=>{
+	runSequence(['watch', 'server:init'], callback);
+});
+

@@ -27,7 +27,6 @@ const autoprefixer 		= 	require('gulp-autoprefixer');
 const cleanCss 			= 	require('gulp-clean-css');
 const uglify        	= 	require('gulp-uglify');
 const imagemin      	= 	require('gulp-imagemin');
-const watch 	      	= 	require('gulp-watch');
 const concat			= 	require('gulp-concat');
 const rename        	= 	require('gulp-rename');
 const cache      		= 	require('gulp-cache');

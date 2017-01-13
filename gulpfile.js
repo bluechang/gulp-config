@@ -32,45 +32,44 @@ const rename        	= 	require('gulp-rename');
 const cache      		= 	require('gulp-cache');
 const runSequence  		= 	require('run-sequence');
 const browserSync   	= 	require('browser-sync');
-const reload			=	browserSync.reload;
 
 
 const paths = {
 	base: {
-		src: 'src',
-		srcAll: 'src/**',
+		src: 'app',
+		srcAll: 'app/**',
 		dest: 'dist',
 		destAll: 'dist/**'
 	},
 	html: {
-		src: ['src/*.html'],
+		src: ['app/*.html'],
 		dest: 'dist'
 	},
 	less: {
-		src: ['src/static/less/*.less'],
-		main: 'src/static/less/style.less',
+		src: ['app/static/less/*.less'],
+		main: 'app/static/less/style.less',
 		dest: 'dist/static/css'
 	},
 	sass: {
-		src: ['src/static/sass/*.scss'],
-		main: 'src/static/sass/style.scss',
+		src: ['app/static/sass/*.scss'],
+		main: 'app/static/sass/style.scss',
 		dest: 'dist/static/css'
 	},
 	js: {
-		src: ['src/static/js/*.js'],
+		src: ['app/static/js/*.js'],
 		all: 'sky.js',
 		dest: 'dist/static/js'
 	},
 	lib: {
-		src: ['src/static/lib/*.js'],
+		src: ['app/static/lib/*.js'],
 		dest: 'dist/static/lib'
 	},
 	image: {
-		src: ['src/static/images/**/*.*'],
+		src: ['app/static/images/**/*.*'],
 		dest: 'dist/static/images'
 	},
 	media: {
-		src: ['src/static/images/**'],
+		src: ['app/static/images/**'],
 		dest: 'dist/static/images'
 	}
 };
@@ -85,7 +84,7 @@ gulp.task('clean', ()=>{
 gulp.task('html', ()=>{					
 	return gulp.src(paths.html.src)
 				.pipe(gulp.dest(paths.html.dest))
-				.pipe(reload({ stream:true }));
+				.pipe(browserSync.stream({once: true}));
 });
 
 gulp.task('less', ()=>{
@@ -97,7 +96,7 @@ gulp.task('less', ()=>{
 				.pipe(cleanCss())
 				.pipe(rename({extname: '.min.css'}))
 				.pipe(gulp.dest(paths.less.dest))
-				.pipe(reload({ stream:true }));
+				.pipe(browserSync.stream({once: true}));
 });
 
 gulp.task('js', ()=>{  
@@ -106,14 +105,14 @@ gulp.task('js', ()=>{
 				.pipe(concat(paths.js.all))
 				.pipe(rename({suffix: '.min'}))
 				.pipe(gulp.dest(paths.js.dest))
-				.pipe(reload({ stream:true }));
+				.pipe(browserSync.stream({once: true}));
 });
 
 gulp.task('image', ()=>{		
 	return gulp.src(paths.image.src)
 				.pipe(cache(imagemin()))
 				.pipe(gulp.dest(paths.image.dest))
-				.pipe(reload({ stream:true }));
+				.pipe(browserSync.stream({once: true}));
 });
 
 gulp.task('lib', ()=>{
@@ -121,7 +120,7 @@ gulp.task('lib', ()=>{
 				.pipe(uglify())
 				.pipe(rename({suffix: '.min'}))
 				.pipe(gulp.dest(paths.lib.dest))
-				.pipe(reload({ stream:true }));
+				.pipe(browserSync.stream({once: true}));
 });
 
 gulp.task('server:init', ()=>{

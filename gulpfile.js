@@ -11,11 +11,11 @@
  * 1、接受一个callback
  * 2、返回一个stream
  * 3、返回一个promise
- * 下面的，clean, html, less, sass, js, lib, image 
+ * 下面的，clean, html, less, js, lib, image 
  * 因为返回一个stream，将会异步执行。
  * 除此以外，将会同步执行
  *
- * 如需保证任务的顺序执行，可用插件gulp-sequence
+ * 如需保证任务的顺序执行，可用插件run-sequence
  * 
  * 
  */

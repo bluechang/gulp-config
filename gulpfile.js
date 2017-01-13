@@ -144,7 +144,7 @@ gulp.task('watch', ()=>{
 
 
 /*build*/
-gulp.task('build', (callback)=>{
+gulp.task('default', (callback)=>{
 	// 数组里的是可以异步执行的
 	runSequence('clean', ['html', 'less', 'js', 'lib', 'image'], ['watch', 'server:init'], callback);
 });
@@ -154,7 +154,7 @@ gulp.task('dist', (callback)=>{
 	runSequence('clean', ['html', 'less', 'js', 'lib', 'image'], callback);
 });
 
-/*serve*/
+/*server*/
 gulp.task('server', (callback)=>{
 	runSequence(['watch', 'server:init'], callback);
 });

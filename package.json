@@ -4,7 +4,7 @@
   "description": "app",
   "main": "app.js",
   "scripts": {
-    "build": "npm i && gulp build",
+    "build": "npm i && gulp",
     "server": "gulp server",
     "dist": "gulp dist",
     "clean": "gulp clean"

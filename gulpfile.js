@@ -22,104 +22,58 @@
 
 const gulp 				= 	require('gulp');		
 const del 	 			= 	require('del');
-const less 				= 	require('gulp-less');
-const autoprefixer 		= 	require('gulp-autoprefixer');
-const cleanCss 			= 	require('gulp-clean-css');
-const uglify        	= 	require('gulp-uglify');
-const imagemin      	= 	require('gulp-imagemin');
-const concat			= 	require('gulp-concat');
-const rename        	= 	require('gulp-rename');
-const cache      		= 	require('gulp-cache');
 const runSequence  		= 	require('run-sequence');
+const gulpLoadPlugins 	= 	require('gulp-load-plugins');
 const browserSync   	= 	require('browser-sync');
-
-
-const paths = {
-	base: {
-		src: 'app',
-		srcAll: 'app/**',
-		dest: 'dist',
-		destAll: 'dist/**'
-	},
-	html: {
-		src: ['app/*.html'],
-		dest: 'dist'
-	},
-	less: {
-		src: ['app/static/less/*.less'],
-		main: 'app/static/less/style.less',
-		dest: 'dist/static/css'
-	},
-	sass: {
-		src: ['app/static/sass/*.scss'],
-		main: 'app/static/sass/style.scss',
-		dest: 'dist/static/css'
-	},
-	js: {
-		src: ['app/static/js/*.js'],
-		all: 'sky.js',
-		dest: 'dist/static/js'
-	},
-	lib: {
-		src: ['app/static/lib/*.js'],
-		dest: 'dist/static/lib'
-	},
-	image: {
-		src: ['app/static/images/**/*.*'],
-		dest: 'dist/static/images'
-	},
-	media: {
-		src: ['app/static/images/**'],
-		dest: 'dist/static/images'
-	}
-};
+const $ 				=	gulpLoadPlugins();
 
 
 
 gulp.task('clean', ()=>{
-	//del中的 '**', 会删除所有的 children 和 parent
-	return del([paths.base.destAll]);
+	//del中的 '**', 会删除所有的 children 和 parent 
+	return del(['dist/**']);
 });
 
 gulp.task('html', ()=>{					
-	return gulp.src(paths.html.src)
-				.pipe(gulp.dest(paths.html.dest))
+	return gulp.src('src/*.html')
+				.pipe(gulp.dest('dist'))
 				.pipe(browserSync.stream({once: true}));
 });
 
-gulp.task('less', ()=>{
-	return gulp.src(paths.less.main)
-				.pipe(less())
-				.pipe(autoprefixer({
+gulp.task('styles', ()=>{
+	return gulp.src('src/static/less/style.less')
+				.pipe($.plumber())
+				.pipe($.less())
+				.pipe($.autoprefixer({
 					browsers: ['Chrome > 0', 'ff > 0', 'ie > 0', 'Opera > 0', 'iOS > 0', 'Android > 0']
 				}))
-				.pipe(cleanCss())
-				.pipe(rename({extname: '.min.css'}))
-				.pipe(gulp.dest(paths.less.dest))
+				.pipe($.csso())
+				.pipe($.rename({suffix: '.min'}))
+				.pipe(gulp.dest('dist/static/css'))
 				.pipe(browserSync.stream({once: true}));
 });
 
-gulp.task('js', ()=>{  
-	return gulp.src(paths.js.src)
-				.pipe(uglify())
-				.pipe(concat(paths.js.all))
-				.pipe(rename({suffix: '.min'}))
-				.pipe(gulp.dest(paths.js.dest))
+gulp.task('scripts', ()=>{  
+	return gulp.src('src/static/js/*.js')
+				.pipe($.concat('sky.js'))
+				.pipe($.uglify())
+				.pipe($.rename({suffix: '.min'}))
+				.pipe(gulp.dest('dist/static/js'))
 				.pipe(browserSync.stream({once: true}));
 });
 
-gulp.task('image', ()=>{		
-	return gulp.src(paths.image.src)
-				.pipe(cache(imagemin()))
-				.pipe(gulp.dest(paths.image.dest))
+gulp.task('images', ()=>{		
+	return gulp.src('src/static/images/*')
+				.pipe($.cache($.imagemin()))
+				.pipe(gulp.dest('dist/static/images'))
 				.pipe(browserSync.stream({once: true}));
 });
 
 gulp.task('lib', ()=>{
-	return gulp.src(paths.lib.src)
-				.pipe(uglify())
-				.pipe(rename({suffix: '.min'}))
-				.pipe(gulp.dest(paths.lib.dest))
+	return gulp.src('src/static/lib/*.js')
+				.pipe($.uglify())
+				.pipe($.rename({suffix: '.min'}))
+				.pipe(gulp.dest('dist/static/lib'))
 				.pipe(browserSync.stream({once: true}));
 });
 
@@ -134,11 +88,11 @@ gulp.task('server:init', ()=>{
 });
 
 gulp.task('watch', ()=>{
-	gulp.watch(paths.html.src, ['html']);  
-	gulp.watch(paths.less.src, ['less']);
-	gulp.watch(paths.image.src, ['image']); 
-	gulp.watch(paths.lib.src, ['lib']);
-	gulp.watch(paths.js.src, ['js']); 
+	gulp.watch('src/*.html', ['html']);  
+	gulp.watch('src/static/less/*.less', ['styles']);
+	gulp.watch('src/static/images/*', ['images']); 
+	gulp.watch('src/static/lib/*.js', ['lib']);
+	gulp.watch('src/static/js/*.js', ['scripts']); 
 });
 
 
@@ -146,12 +100,12 @@ gulp.task('watch', ()=>{
 /*build*/
 gulp.task('default', (callback)=>{
 	// 数组里的是可以异步执行的
-	runSequence('clean', ['html', 'less', 'js', 'lib', 'image'], ['watch', 'server:init'], callback);
+	runSequence('clean', ['html', 'styles', 'scripts', 'lib', 'images'], ['watch', 'server:init'], callback);
 });
 
 /*dist*/
 gulp.task('dist', (callback)=>{
-	runSequence('clean', ['html', 'less', 'js', 'lib', 'image'], callback);
+	runSequence('clean', ['html', 'styles', 'scripts', 'lib', 'images'], callback);
 });
 
 /*server*/

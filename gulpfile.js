@@ -24,7 +24,7 @@ const gulp 				= 	require('gulp');
 const del 	 			= 	require('del');
 const runSequence  		= 	require('run-sequence');
 const gulpLoadPlugins 	= 	require('gulp-load-plugins');
-const browserSync   	= 	require('browser-sync');
+const browserSync   	= 	require('browser-sync').create();
 const $ 				=	gulpLoadPlugins();
 
 
@@ -42,22 +42,26 @@ gulp.task('html', ()=>{
 
 gulp.task('styles', ()=>{
 	return gulp.src('src/static/less/style.less')
+				// .pipe($.sourcemaps.init())
 				.pipe($.plumber())
 				.pipe($.less())
 				.pipe($.autoprefixer({
 					browsers: ['Chrome > 0', 'ff > 0', 'ie > 0', 'Opera > 0', 'iOS > 0', 'Android > 0']
 				}))
-				.pipe($.csso())
+				.pipe($.cleanCss())
 				.pipe($.rename({suffix: '.min'}))
+				// .pipe($.sourcemaps.write())
 				.pipe(gulp.dest('dist/static/css'))
 				.pipe(browserSync.stream({once: true}));
 });
 
 gulp.task('scripts', ()=>{  
 	return gulp.src('src/static/js/*.js')
+				// .pipe($.sourcemaps.init())
 				.pipe($.concat('sky.js'))
 				.pipe($.uglify())
 				.pipe($.rename({suffix: '.min'}))
+				// .pipe($.sourcemaps.write())
 				.pipe(gulp.dest('dist/static/js'))
 				.pipe(browserSync.stream({once: true}));
 });

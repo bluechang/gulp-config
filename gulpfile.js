@@ -67,7 +67,7 @@ gulp.task('scripts', ()=>{
 });
 
 gulp.task('images', ()=>{		
-	return gulp.src('src/static/images/*')
+	return gulp.src('src/static/images/**/*')
 				.pipe($.cache($.imagemin()))
 				.pipe(gulp.dest('dist/static/images'))
 				.pipe(browserSync.stream({once: true}));

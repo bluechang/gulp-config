@@ -107,8 +107,8 @@ gulp.task('default', (callback)=>{
 	runSequence('clean', ['html', 'styles', 'scripts', 'lib', 'images'], ['watch', 'server:init'], callback);
 });
 
-/*dist*/
-gulp.task('dist', (callback)=>{
+/*build*/
+gulp.task('build', (callback)=>{
 	runSequence('clean', ['html', 'styles', 'scripts', 'lib', 'images'], callback);
 });
 

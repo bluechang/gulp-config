@@ -4,10 +4,9 @@
   "description": "app",
   "main": "app.js",
   "scripts": {
-    "build": "npm i && gulp",
+    "start": "npm i && gulp",
     "server": "gulp server",
-    "dist": "gulp dist",
-    "clean": "gulp clean"
+    "build": "gulp build"
   },
   "author": "bluechang",
   "license": "ISC",

@@ -13,7 +13,12 @@
  * 3、返回一个promise
  * 下面的，clean, html, less, js, lib, image 
  * 因为返回一个stream，将会异步执行。
- * 除此以外，将会同步执行
+ * 除此以外，将会同步执行。
+ *
+ * fn符合上面规则的目的：
+ * 1、有依赖时（依赖中的 fn 必须符合以上规则），保证在依赖执行完之后，再执行 fn（可以不符合以上规则）。
+ * 		只是保证此 task 和 deps 的先后顺序，不保证 deps 中的先后顺序
+ * 2、使 task 异步执行 
  *
  * 如需保证任务的顺序执行，可用插件run-sequence
  * 
@@ -68,7 +73,7 @@ gulp.task('scripts', ()=>{
 
 gulp.task('images', ()=>{		
 	return gulp.src('src/static/images/**/*')
-				.pipe($.cache($.imagemin()))
+				.pipe($.cache($.imagemin({optimizationLevel: 5})))
 				.pipe(gulp.dest('dist/static/images'))
 				.pipe(browserSync.stream({once: true}));
 });

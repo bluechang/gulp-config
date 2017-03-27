@@ -36,6 +36,7 @@ gulp.task('clean', ()=>{
 
 gulp.task('html', ()=>{					
 	return gulp.src('src/*.html')
+				.pipe($.changed('dist'))
 				.pipe(gulp.dest('dist'))
 				.pipe(browserSync.stream({once: true}));
 });
@@ -43,13 +44,11 @@ gulp.task('html', ()=>{
 gulp.task('styles', ()=>{
 	return gulp.src('src/static/less/style.less')
 				// .pipe($.sourcemaps.init())
-				.pipe($.plumber())
+				.pipe($.changed('dist/static/css', {extension: '.css'}))
 				.pipe($.less())
-				.pipe($.autoprefixer({
-					browsers: ['Chrome > 0', 'Safari > 0', 'iOS > 0', 'Android > 0']
-				}))
+				.pipe($.autoprefixer())
 				.pipe($.cleanCss())
-				.pipe($.rename({suffix: '.min'}))
+				// .pipe($.rename({suffix: '.min'}))
 				// .pipe($.sourcemaps.write())
 				.pipe(gulp.dest('dist/static/css'))
 				.pipe(browserSync.stream({once: true}));
@@ -68,7 +67,13 @@ gulp.task('scripts', ()=>{
 
 gulp.task('images', ()=>{		
 	return gulp.src('src/static/images/**/*')
-				.pipe($.cache($.imagemin()))
+				.pipe($.changed('dist/static/images'))
+				.pipe($.imagemin([
+						$.imagemin.gifsicle({interlaced: true}),
+						$.imagemin.jpegtran({progressive: true}),
+						$.imagemin.optipng({optimizationLevel: 5}),
+						$.imagemin.svgo({plugins: [{removeViewBox: true}]})
+				]))
 				.pipe(gulp.dest('dist/static/images'))
 				.pipe(browserSync.stream({once: true}));
 });
@@ -84,7 +89,7 @@ gulp.task('lib', ()=>{
 gulp.task('server:init', ()=>{
 	browserSync.init({
 		notify: false,
-		port: 3000,
+		port: 7000,
 		server: { 
 			baseDir: './dist'
 		}

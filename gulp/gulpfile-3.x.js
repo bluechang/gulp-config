@@ -43,10 +43,9 @@ gulp.task('html', ()=>{
 gulp.task('styles', ()=>{
 	return gulp.src('src/static/less/style.less')
 				// .pipe($.sourcemaps.init())
-				.pipe($.plumber())
 				.pipe($.less())
 				.pipe($.autoprefixer({
-					browsers: ['Chrome > 0', 'Safari > 0', 'iOS > 0', 'Android > 0']
+					browsers: ['Chrome > 0', 'Safari > 0', 'Firefox > 0', 'Opera > 0', 'Explorer > 0', 'Edge > 0', 'iOS > 0', 'Android > 0']
 				}))
 				.pipe($.cleanCss())
 				.pipe($.rename({suffix: '.min'}))
@@ -68,7 +67,12 @@ gulp.task('scripts', ()=>{
 
 gulp.task('images', ()=>{		
 	return gulp.src('src/static/images/**/*')
-				.pipe($.cache($.imagemin()))
+				.pipe($.imagemin([
+						$.imagemin.gifsicle({interlaced: true}),
+						$.imagemin.jpegtran({progressive: true}),
+						$.imagemin.optipng({optimizationLevel: 5}),
+						$.imagemin.svgo({plugins: [{removeViewBox: true}]})
+				]))
 				.pipe(gulp.dest('dist/static/images'))
 				.pipe(browserSync.stream({once: true}));
 });
@@ -84,7 +88,7 @@ gulp.task('lib', ()=>{
 gulp.task('server:init', ()=>{
 	browserSync.init({
 		notify: false,
-		port: 3000,
+		port: 7000,
 		server: { 
 			baseDir: './dist'
 		}

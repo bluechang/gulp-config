@@ -4,9 +4,9 @@
   "description": "app",
   "main": "app.js",
   "scripts": {
+    "gulp": "set NODE_ENV=dev && gulp",
     "dev": "set NODE_ENV=dev && npm i && gulp",
-    "pro": "set NODE_ENV=pro && npm i && gulp",
-    "dist": "gulp dist"
+    "pro": "set NODE_ENV=pro && gulp pro"
   },
   "author": "bluechang",
   "license": "ISC",
@@ -15,6 +15,7 @@
     "del": "^2.2.2",
     "gulp": "^3.9.1",
     "gulp-autoprefixer": "^3.1.1",
+    "gulp-changed": "^3.0.0",
     "gulp-clean-css": "^3.0.4",
     "gulp-concat": "^2.6.0",
     "gulp-if": "^2.0.2",

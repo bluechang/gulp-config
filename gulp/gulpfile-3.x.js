@@ -26,7 +26,7 @@ const runSequence  		= 	require('run-sequence');
 const gulpLoadPlugins 	= 	require('gulp-load-plugins');
 const browserSync   	= 	require('browser-sync').create();
 const $ 				=	gulpLoadPlugins();
-const isDev				=	process.env.NODE_ENV.trim() === 'dev';
+const isDev				=	(process.env.NODE_ENV && process.env.NODE_ENV.trim() || 'dev') === 'dev';
 
 
 
@@ -37,6 +37,7 @@ gulp.task('clean', ()=>{
 
 gulp.task('html', ()=>{					
 	return gulp.src('src/*.html')
+				.pipe($.changed('dist'))
 				.pipe(gulp.dest('dist'))
 				.pipe(browserSync.stream({once: true}));
 });
@@ -66,18 +67,20 @@ gulp.task('scripts', ()=>{
 
 gulp.task('images', ()=>{		
 	return gulp.src('src/static/images/**/*')
+				.pipe($.changed('dist/static/images'))
 				.pipe($.imagemin([
-						$.imagemin.gifsicle({interlaced: true}),
-						$.imagemin.jpegtran({progressive: true}),
-						$.imagemin.optipng({optimizationLevel: 5}),
-						$.imagemin.svgo({plugins: [{removeViewBox: true}]})
-				]))
+							$.imagemin.gifsicle({interlaced: true}),
+							$.imagemin.jpegtran({progressive: true}),
+							$.imagemin.optipng({optimizationLevel: 5}),
+							$.imagemin.svgo({plugins: [{removeViewBox: true}]})
+					]))
 				.pipe(gulp.dest('dist/static/images'))
 				.pipe(browserSync.stream({once: true}));
 });
 
 gulp.task('lib', ()=>{
 	return gulp.src('src/static/lib/*.js')
+				.pipe($.changed('dist/static/lib'))
 				.pipe($.uglify())
 				.pipe($.rename({suffix: '.min'}))
 				.pipe(gulp.dest('dist/static/lib'))
@@ -97,7 +100,7 @@ gulp.task('server', ()=>{
 gulp.task('watch', ()=>{
 	gulp.watch('src/*.html', ['html']);  
 	gulp.watch('src/static/less/**/*.less', ['styles']);
-	gulp.watch('src/static/images/**/*', ['images']); 
+	gulp.watch('src/static/images/**/*.@(jpe?g|png|gif|svg)', ['images']); 
 	gulp.watch('src/static/lib/**/*.js', ['lib']);
 	gulp.watch('src/static/js/**/*.js', ['scripts']); 
 });
@@ -110,8 +113,8 @@ gulp.task('default', (callback)=>{
 	runSequence('clean', ['html', 'styles', 'scripts', 'lib', 'images'], ['watch', 'server'], callback);
 });
 
-/*dist*/
-gulp.task('dist', (callback)=>{
+/*pro*/
+gulp.task('pro', (callback)=>{
 	runSequence('clean', ['html', 'styles', 'scripts', 'lib', 'images'], callback);
 });
 

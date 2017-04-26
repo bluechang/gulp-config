@@ -44,9 +44,7 @@ gulp.task('styles', ()=>{
 	return gulp.src('src/static/less/style.less')
 				// .pipe($.sourcemaps.init())
 				.pipe($.less())
-				.pipe($.autoprefixer({
-					browsers: ['Chrome > 0', 'Safari > 0', 'Firefox > 0', 'Opera > 0', 'Explorer > 0', 'Edge > 0', 'iOS > 0', 'Android > 0']
-				}))
+				.pipe($.autoprefixer())
 				.pipe($.cleanCss())
 				.pipe($.rename({suffix: '.min'}))
 				// .pipe($.sourcemaps.write())

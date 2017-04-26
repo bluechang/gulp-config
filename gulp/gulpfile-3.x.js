@@ -26,6 +26,7 @@ const runSequence  		= 	require('run-sequence');
 const gulpLoadPlugins 	= 	require('gulp-load-plugins');
 const browserSync   	= 	require('browser-sync').create();
 const $ 				=	gulpLoadPlugins();
+const isDev				=	process.env.NODE_ENV.trim() === 'dev';
 
 
 
@@ -42,23 +43,23 @@ gulp.task('html', ()=>{
 
 gulp.task('styles', ()=>{
 	return gulp.src('src/static/less/style.less')
-				// .pipe($.sourcemaps.init())
+				.pipe($.if(isDev, $.sourcemaps.init()))
 				.pipe($.less())
 				.pipe($.autoprefixer())
 				.pipe($.cleanCss())
 				.pipe($.rename({suffix: '.min'}))
-				// .pipe($.sourcemaps.write())
+				.pipe($.if(isDev, $.sourcemaps.write()))
 				.pipe(gulp.dest('dist/static/css'))
 				.pipe(browserSync.stream({once: true}));
 });
 
 gulp.task('scripts', ()=>{  
 	return gulp.src('src/static/js/**/*.js')
-				// .pipe($.sourcemaps.init())
+				.pipe($.if(isDev, $.sourcemaps.init()))
 				.pipe($.concat('sky.js'))
 				.pipe($.uglify())
 				.pipe($.rename({suffix: '.min'}))
-				// .pipe($.sourcemaps.write())
+				.pipe($.if(isDev, $.sourcemaps.write()))
 				.pipe(gulp.dest('dist/static/js'))
 				.pipe(browserSync.stream({once: true}));
 });
@@ -83,7 +84,7 @@ gulp.task('lib', ()=>{
 				.pipe(browserSync.stream({once: true}));
 });
 
-gulp.task('server:init', ()=>{
+gulp.task('server', ()=>{
 	browserSync.init({
 		notify: false,
 		port: 7000,
@@ -103,19 +104,14 @@ gulp.task('watch', ()=>{
 
 
 
-/*build*/
+/*default*/
 gulp.task('default', (callback)=>{
 	// 数组里的是可以异步执行的
-	runSequence('clean', ['html', 'styles', 'scripts', 'lib', 'images'], ['watch', 'server:init'], callback);
+	runSequence('clean', ['html', 'styles', 'scripts', 'lib', 'images'], ['watch', 'server'], callback);
 });
 
 /*dist*/
 gulp.task('dist', (callback)=>{
 	runSequence('clean', ['html', 'styles', 'scripts', 'lib', 'images'], callback);
-});
-
-/*server*/
-gulp.task('server', (callback)=>{
-	runSequence(['watch', 'server:init'], callback);
 });
 

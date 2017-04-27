@@ -68,12 +68,14 @@ gulp.task('scripts', ()=>{
 gulp.task('images', ()=>{		
 	return gulp.src('src/static/images/**/*')
 				.pipe($.changed('dist/static/images'))
-				.pipe($.imagemin([
+				.pipe($.if(!isDev,
+					$.imagemin([
 							$.imagemin.gifsicle({interlaced: true}),
 							$.imagemin.jpegtran({progressive: true}),
 							$.imagemin.optipng({optimizationLevel: 5}),
 							$.imagemin.svgo({plugins: [{removeViewBox: true}]})
 					]))
+				)
 				.pipe(gulp.dest('dist/static/images'))
 				.pipe(browserSync.stream({once: true}));
 });

@@ -4,8 +4,8 @@
   "description": "app",
   "main": "app.js",
   "scripts": {
-    "gulp": "set NODE_ENV=dev && gulp",
-    "dev": "set NODE_ENV=dev && npm i && gulp",
+    "build": "set NODE_ENV=dev && npm i && gulp",
+    "dev": "set NODE_ENV=dev && gulp",
     "pro": "set NODE_ENV=pro && gulp pro"
   },
   "author": "bluechang",

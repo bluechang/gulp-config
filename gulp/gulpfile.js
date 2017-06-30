@@ -20,13 +20,13 @@
  * 
  */
 
-const gulp 				= 	require('gulp');		
-const del 	 			= 	require('del');
-const runSequence  		= 	require('run-sequence');
+const gulp 		= 	require('gulp');		
+const del 	 	= 	require('del');
+const runSequence  	= 	require('run-sequence');
 const gulpLoadPlugins 	= 	require('gulp-load-plugins');
 const browserSync   	= 	require('browser-sync').create();
-const $ 				=	gulpLoadPlugins();
-const isDev				=	(process.env.NODE_ENV && process.env.NODE_ENV.trim() || 'dev') === 'dev';
+const $ 		=	gulpLoadPlugins();
+const isDev		=	(process.env.NODE_ENV && process.env.NODE_ENV.trim() || 'dev') === 'dev';
 
 
 

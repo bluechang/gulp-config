@@ -1,5 +1,5 @@
 {
-  "name": "gulp",
+  "name": "gulp-starter",
   "version": "1.0.0",
   "description": "app",
   "main": "app.js",
@@ -8,7 +8,7 @@
     "dev": "set NODE_ENV=dev && gulp",
     "pro": "set NODE_ENV=pro && gulp pro"
   },
-  "author": "bluechang",
+  "author": "Katt Zhang",
   "license": "ISC",
   "devDependencies": {
     "browser-sync": "^2.17.5",

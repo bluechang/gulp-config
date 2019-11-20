@@ -20,103 +20,103 @@
  * 
  */
 
-const gulp 		= 	require('gulp');		
-const del 	 	= 	require('del');
-const runSequence  	= 	require('run-sequence');
-const gulpLoadPlugins 	= 	require('gulp-load-plugins');
-const browserSync   	= 	require('browser-sync').create();
-const $ 		=	gulpLoadPlugins();
-const isDev		=	(process.env.NODE_ENV && process.env.NODE_ENV.trim() || 'dev') === 'dev';
+const gulp = require('gulp');
+const del = require('del');
+const runSequence = require('run-sequence');
+const gulpLoadPlugins = require('gulp-load-plugins');
+const browserSync = require('browser-sync').create();
+const $ = gulpLoadPlugins();
+const isDev = (process.env.NODE_ENV && process.env.NODE_ENV.trim() || 'dev') === 'dev';
 
 
 
-gulp.task('clean', ()=>{
+gulp.task('clean', () => {
 	//del中的 '**', 会删除所有的 children 和 parent 
 	return del(['dist/**']);
 });
 
-gulp.task('html', ()=>{					
+gulp.task('html', () => {
 	return gulp.src('src/*.html')
-				.pipe($.changed('dist'))
-				.pipe(gulp.dest('dist'))
-				.pipe(browserSync.stream({once: true}));
+		.pipe($.changed('dist'))
+		.pipe(gulp.dest('dist'))
+		.pipe(browserSync.stream({ once: true }));
 });
 
-gulp.task('styles', ()=>{
+gulp.task('styles', () => {
 	return gulp.src('src/static/less/style.less')
-				.pipe($.if(isDev, $.sourcemaps.init()))
-				.pipe($.less())
-				.pipe($.autoprefixer())
-				.pipe($.cleanCss())
-				.pipe($.rename({suffix: '.min'}))
-				.pipe($.if(isDev, $.sourcemaps.write()))
-				.pipe(gulp.dest('dist/static/css'))
-				.pipe(browserSync.stream({once: true}));
+		.pipe($.if(isDev, $.sourcemaps.init()))
+		.pipe($.less())
+		.pipe($.autoprefixer())
+		.pipe($.cleanCss())
+		.pipe($.rename({ suffix: '.min' }))
+		.pipe($.if(isDev, $.sourcemaps.write()))
+		.pipe(gulp.dest('dist/static/css'))
+		.pipe(browserSync.stream({ once: true }));
 });
 
-gulp.task('scripts', ()=>{  
+gulp.task('scripts', () => {
 	return gulp.src('src/static/js/**/*.js')
-				.pipe($.if(isDev, $.sourcemaps.init()))
-				.pipe($.concat('sky.js'))
-				.pipe($.uglify())
-				.pipe($.rename({suffix: '.min'}))
-				.pipe($.if(isDev, $.sourcemaps.write()))
-				.pipe(gulp.dest('dist/static/js'))
-				.pipe(browserSync.stream({once: true}));
+		.pipe($.if(isDev, $.sourcemaps.init()))
+		.pipe($.concat('sky.js'))
+		.pipe($.uglify())
+		.pipe($.rename({ suffix: '.min' }))
+		.pipe($.if(isDev, $.sourcemaps.write()))
+		.pipe(gulp.dest('dist/static/js'))
+		.pipe(browserSync.stream({ once: true }));
 });
 
-gulp.task('images', ()=>{		
+gulp.task('images', () => {
 	return gulp.src('src/static/images/**/*')
-				.pipe($.changed('dist/static/images'))
-				.pipe($.if(!isDev,
-					$.imagemin([
-							$.imagemin.gifsicle({interlaced: true}),
-							$.imagemin.jpegtran({progressive: true}),
-							$.imagemin.optipng({optimizationLevel: 5}),
-							$.imagemin.svgo({plugins: [{removeViewBox: true}]})
-					]))
-				)
-				.pipe(gulp.dest('dist/static/images'))
-				.pipe(browserSync.stream({once: true}));
+		.pipe($.changed('dist/static/images'))
+		.pipe($.if(!isDev,
+			$.imagemin([
+				$.imagemin.gifsicle({ interlaced: true }),
+				$.imagemin.jpegtran({ progressive: true }),
+				$.imagemin.optipng({ optimizationLevel: 5 }),
+				$.imagemin.svgo({ plugins: [{ removeViewBox: true }] })
+			]))
+		)
+		.pipe(gulp.dest('dist/static/images'))
+		.pipe(browserSync.stream({ once: true }));
 });
 
-gulp.task('lib', ()=>{
+gulp.task('lib', () => {
 	return gulp.src('src/static/lib/*.js')
-				.pipe($.changed('dist/static/lib'))
-				.pipe($.uglify())
-				.pipe($.rename({suffix: '.min'}))
-				.pipe(gulp.dest('dist/static/lib'))
-				.pipe(browserSync.stream({once: true}));
+		.pipe($.changed('dist/static/lib'))
+		.pipe($.uglify())
+		.pipe($.rename({ suffix: '.min' }))
+		.pipe(gulp.dest('dist/static/lib'))
+		.pipe(browserSync.stream({ once: true }));
 });
 
-gulp.task('server', ()=>{
+gulp.task('server', () => {
 	browserSync.init({
 		notify: false,
 		port: 7000,
-		server: { 
+		server: {
 			baseDir: './dist'
 		}
 	});
 });
 
-gulp.task('watch', ()=>{
-	gulp.watch('src/*.html', ['html']);  
+gulp.task('watch', () => {
+	gulp.watch('src/*.html', ['html']);
 	gulp.watch('src/static/less/**/*.less', ['styles']);
-	gulp.watch('src/static/images/**/*.@(jpe?g|png|gif|svg)', ['images']); 
+	gulp.watch('src/static/images/**/*.@(jpe?g|png|gif|svg)', ['images']);
 	gulp.watch('src/static/lib/**/*.js', ['lib']);
-	gulp.watch('src/static/js/**/*.js', ['scripts']); 
+	gulp.watch('src/static/js/**/*.js', ['scripts']);
 });
 
 
 
 /*default*/
-gulp.task('default', (callback)=>{
+gulp.task('default', (callback) => {
 	// 数组里的是可以异步执行的
 	runSequence('clean', ['html', 'styles', 'scripts', 'lib', 'images'], ['watch', 'server'], callback);
 });
 
 /*pro*/
-gulp.task('pro', (callback)=>{
+gulp.task('pro', (callback) => {
 	runSequence('clean', ['html', 'styles', 'scripts', 'lib', 'images'], callback);
 });
 

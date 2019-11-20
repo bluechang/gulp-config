@@ -1,13 +1,11 @@
-
-
-/*general style*/
+/* common style */
 .ellipsis(){
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
 }
 
-.centred(@position: absolute){
+.centred(@position: absolute) {
 	position: @position;
 	left: 50%;
 	top: 50%;
@@ -15,7 +13,7 @@
 	transform: translate3d(-50%, -50%, 0);
 }
 
-.centred-fix(){
+.centred-fix() {
 	position: fixed;
 	left: 50%;
 	top: 50%;
@@ -23,13 +21,13 @@
 	transform: translate3d(-50%, -50%, 0);
 }
 
-.centred-horizontal(@position: absolute){
+.centred-horizontal(@position: absolute) {
 	position: @position;
 	left: 50%;
 	transform: translate3d(-50%, 0, 0);
 }
 
-.text-shadow(@width: 1px, @blur: 5px, @color: #0c57ed){
+.text-shadow(@width: 1px, @blur: 5px, @color: #0c57ed) {
 	text-shadow: -@width 0 @blur @color,
 				0 -@width @blur @color,
 				@width 0 @blur @color,

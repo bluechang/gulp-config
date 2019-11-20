@@ -1,40 +1,40 @@
 {
-	"name": "gulp-starter",
-	"version": "1.0.0",
-	"description": "app",
-	"main": "app.js",
-	"scripts": {
-		"build": "set NODE_ENV=dev && npm i && gulp",
-		"dev": "set NODE_ENV=dev && gulp",
-		"pro": "set NODE_ENV=pro && gulp pro"
-	},
-	"author": "Katt Zhang",
-	"license": "ISC",
-	"devDependencies": {
-		"browser-sync": "^2.17.5",
-		"del": "^2.2.2",
-		"gulp": "^3.9.1",
-		"gulp-autoprefixer": "^3.1.1",
-		"gulp-changed": "^3.0.0",
-		"gulp-clean-css": "^3.0.4",
-		"gulp-concat": "^2.6.0",
-		"gulp-if": "^2.0.2",
-		"gulp-imagemin": "^3.0.3",
-		"gulp-less": "^3.1.0",
-		"gulp-load-plugins": "^1.4.0",
-		"gulp-rename": "^1.2.2",
-		"gulp-sourcemaps": "^2.6.0",
-		"gulp-uglify": "^2.0.0",
-		"run-sequence": "^1.2.2"
-	},
-	"browserslist": [
-		"Chrome > 0",
-		"Safari > 0",
-		"Firefox > 0",
-		"Opera > 0",
-		"iOS > 0",
-		"Android > 0",
-		"Explorer > 0",
-		"Edge > 0"
-	]
+  "name": "gulp-starter",
+  "version": "1.0.0",
+  "description": "app",
+  "main": "app.js",
+  "scripts": {
+    "build": "set NODE_ENV=dev && npm i && gulp",
+    "dev": "set NODE_ENV=dev && gulp",
+    "pro": "set NODE_ENV=pro && gulp pro"
+  },
+  "author": "Katt Zhang",
+  "license": "ISC",
+  "devDependencies": {
+    "browser-sync": "^2.17.5",
+    "del": "^2.2.2",
+    "gulp": "^3.9.1",
+    "gulp-autoprefixer": "^3.1.1",
+    "gulp-changed": "^3.0.0",
+    "gulp-clean-css": "^3.0.4",
+    "gulp-concat": "^2.6.0",
+    "gulp-if": "^2.0.2",
+    "gulp-imagemin": "^3.0.3",
+    "gulp-less": "^3.1.0",
+    "gulp-load-plugins": "^1.4.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-sourcemaps": "^2.6.0",
+    "gulp-uglify": "^2.0.0",
+    "run-sequence": "^1.2.2"
+  },
+  "browserslist": [
+    "Chrome > 0",
+    "Safari > 0",
+    "Firefox > 0",
+    "Opera > 0",
+    "iOS > 0",
+    "Android > 0",
+    "Explorer > 0",
+    "Edge > 0"
+  ]
 }
